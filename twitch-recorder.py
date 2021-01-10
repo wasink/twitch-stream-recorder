@@ -152,7 +152,7 @@ class TwitchRecorder:
                 subprocess.call(
                     ["streamlink", "--twitch-disable-ads", "--twitch-oauth-token", self.access_token, "twitch.tv/" + self.username,
  self.quality, "-o", recorded_filename])
-                
+
 
                 logging.info("recording stream is done, processing video file")
                 if os.path.exists(recorded_filename) is True:
@@ -167,7 +167,14 @@ class TwitchRecorder:
 def main(argv):
     twitch_recorder = TwitchRecorder()
     usage_message = "twitch-recorder.py -u <username> -q <quality>"
-    logging.basicConfig(filename="twitch-recorder.log", level=logging.INFO)
+
+    # path for logfiles
+    log_path = os.path.join(config.root_path, "logs")
+
+    # create directory for logPath if not exist
+    if os.path.isdir(log_path) is False:
+        os.makedirs(log_path)
+    logging.basicConfig(filename=os.path.join(log_path, "twitch-recorder.log"), level=logging.INFO)
     logging.getLogger().addHandler(logging.StreamHandler())
 
     try:
